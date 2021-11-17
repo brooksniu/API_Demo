@@ -1,5 +1,6 @@
 // let mainLink = "https://api.spoonacular.com/";
-let mainLink = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com";
+let queryLink = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com";
+let apiLink = "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com";
 // const apiKey = "&apiKey=c6c6e98c49db4067b8ac5b9fce7703cd";
 const apiKey = "126a45f034mshd1de42a24e5a6d2p14ccefjsnd4686ee15764";
 let resultSection = document.getElementById("result");
@@ -15,10 +16,10 @@ async function init() {
     let searchButton = document.getElementById("search");
     searchButton.addEventListener("click", async function() {
         let typeOfSearch = document.getElementById("selector").value;
-        let response = await fetch(mainLink + "/" + typeOfSearch + document.getElementById("query").value, {
+        let response = await fetch(queryLink + "/" + typeOfSearch + document.getElementById("query").value, {
             "method" : "GET",
             "headers" : {
-                "x-rapidapi-host": mainLink,
+                "x-rapidapi-host": apiLink,
                 "x-rapidapi-key": apiKey
             }
         });
