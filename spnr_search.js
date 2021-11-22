@@ -3,8 +3,7 @@ const apiKey = "&apiKey=c6c6e98c49db4067b8ac5b9fce7703cd";
 let resultSection = document.getElementById("result");
 let detail = document.getElementById("detail");
 let res = [];
-
-import { Router } from './Router.js';
+const serverUrl = "http://localhost:3000/";
 
 
 window.addEventListener('DOMContentLoaded', init);
@@ -30,6 +29,8 @@ async function init() {
             result_pic.width = "300";
             result_pic.height = "300";
             resultSection.appendChild(result_pic);
+
+            // if searches for recipes
             if (typeOfSearch == "recipes/complexSearch?query=") {
                 let idNum = res[i].id;
                 let infoQuery = `https://api.spoonacular.com/recipes/${idNum}/information?apiKey=c6c6e98c49db4067b8ac5b9fce7703cd`;
@@ -45,13 +46,40 @@ async function init() {
                     for (let i = 0 ; i < sourceJson.extendedIngredients.length; i++) {
                         let ingredientsDetail = document.createElement("h4");
                         let extIngredient = sourceJson.extendedIngredients[i]
-                        ingredientsDetail.innerHTML = extIngredient.aisle + " " + extIngredient.measures.metric.amount + extIngredient.measures.metric.unitShort + ","; 
+                        ingredientsDetail.innerHTML = extIngredient.nameClean + " " + extIngredient.measures.metric.amount + extIngredient.measures.metric.unitShort + ","; 
                         detail.appendChild(ingredientsDetail);
                     }
                     resultSection.style.display = "none";
                     detail.style.display = "block";
                     console.log(sourceJson);
                 });
+                // add save to db function for each recipe
+                let save_button = document.createElement("button");
+                save_button.innerHTML = "add";
+                let ingredientTable = [];
+                for (let i = 0 ; i < sourceJson.extendedIngredients.length; i++) {
+                    let extIngredient = sourceJson.extendedIngredients[i]
+                    let ingredientString = extIngredient.nameClean + " " + extIngredient.measures.metric.amount + extIngredient.measures.metric.unitShort + ","; 
+                    ingredientTable.push(ingredientString);
+                }
+                save_button.addEventListener("click", async function() {
+                    // fetch from server! (add recipes to DB)
+                    const DBresponse = await fetch(serverUrl + "add", {
+                        method: "POST" ,
+                        headers: {
+                            "Content-type": "application/json"
+                        },
+                        body: JSON.stringify( {
+                            "title": res[i].title,
+                            "img": res[i].image,
+                            "ingredients": ingredientTable
+                        })
+                    })
+                        .then(backInfo => {
+                            console.log(backInfo);
+                        })
+                });
+                resultSection.appendChild(save_button);
                 // when esc is pressed, show search results
                 window.addEventListener("keydown", (event) => {
                     const keyName = event.key;
