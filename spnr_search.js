@@ -6,7 +6,7 @@ const apiKey = "126a45f034mshd1de42a24e5a6d2p14ccefjsnd4686ee15764";
 let resultSection = document.getElementById("result");
 let detail = document.getElementById("detail");
 let res = [];
-const serverUrl = "http://localhost:3000/";
+const serverUrl = "https://devil-dishes.herokuapp.com/";
 
 
 window.addEventListener('DOMContentLoaded', init);
